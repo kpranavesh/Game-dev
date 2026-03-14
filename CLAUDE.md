@@ -7,37 +7,58 @@ _Desktop/laptop game. Solo build. Claude Code + Python._
 
 ## The Game
 
-**Title:** TBD
-**Genre:** TBD
-**One-liner:** TBD
-
-<!-- Fill this in as the idea solidifies -->
+**Title:** TBD (working title: *Us: The Game*)
+**Genre:** Narrative mini-game anthology / casual adventure
+**One-liner:** A 10-level re-enactment of how Krishna and Vandita met, fell in love, and built a life together — played as a birthday gift.
 
 ---
 
 ## About Vandita (Player Profile)
 
 - Wife. Works in ML.
-- [ ] Favorite things / interests:
-- [ ] Humor style:
-- [ ] Games she's played or enjoyed:
-- [ ] Inside jokes or references to include:
-- [ ] Things that would make her laugh:
-- [ ] Things that would make her feel seen:
+- **Games she loves:** Overcooked, It Takes Two — cozy, charming, story-driven, slightly chaotic
+- **Tone she responds to:** Warm + funny. Heartfelt but not sappy. Self-aware humor works.
+- **What will make her laugh:** References to real moments, Krishna being portrayed accurately (flawed, loveable), Beans being a main character
+- **What will make her feel seen:** The small details — the real story told right, not a generic love story
+- **Inside jokes / references to fill in:**
+  - [ ] How they matched on Hinge (details?)
+  - [ ] First date location / what happened
+  - [ ] How Krishna asked her to be his girlfriend
+  - [ ] Friend group details
+  - [ ] Family intro moments
+  - [ ] Move-in chaos
+  - [ ] The proposal story
+  - [ ] Wedding details
+  - [ ] Beans — breed, personality, funny habits
 
 ---
 
 ## Game Concept
 
-<!-- Describe the core loop, win condition, and feel of the game -->
+**Format:** 10 levels, each a short self-contained mini-game with its own mechanic. Shared visual style and characters throughout. Plays like a love letter disguised as a game.
 
-**Core mechanic:**
+**Tone:** Warm, funny, slightly chaotic — Overcooked energy but no stress. She should smile constantly and cry a little at the end.
 
-**Win condition:**
+**Win condition:** Complete all 10 levels and unlock a final cutscene / message.
 
-**Tone:** (funny / heartfelt / chaotic / puzzle-y / etc.)
+**Personalization hooks:** Real names, real places, real moments. Beans as a recurring character. krishna portrayed as himself — charming but a little ridiculous.
 
-**Personalization hooks:** (how Vandita's personality shows up in the game)
+---
+
+## Levels
+
+4-5 levels about Vandita. 3 levels about their life together.
+
+| # | Title | About | Mechanic | Status |
+|---|-------|-------|----------|--------|
+| 1 | **Swipe Right** | Together | Swipe left/right on Hinge profiles — find Krishna among decoys | ✅ Built |
+| 2 | **Good Girl, Beans** | Vandita — her border collie | Simon Says: watch command sequence, repeat it | ✅ Built |
+| 3 | **Yarn Crisis** | Vandita — crocheting | Catch falling yarn balls, don't let Beans steal them | 🔒 Next |
+| 4 | **Code & Deploy** | Vandita — Reddit SWE | Spot the bug in the PR before it goes to prod | 🔒 |
+| 5 | **Beans at the Park** | Vandita + Beans | Border collie fetch chaos — throw the ball, Beans retrieves | 🔒 |
+| 6 | **Will You Be Mine?** | Together | Dialogue choice puzzle — pick exactly the right words | 🔒 |
+| 7 | **The Proposal** | Together | Set up the perfect scene — arrange all the pieces | 🔒 |
+| 8 | **Home** | Together | Place family photos, unlock the ending cutscene | 🔒 |
 
 ---
 
