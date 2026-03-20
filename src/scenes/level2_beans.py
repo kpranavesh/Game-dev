@@ -279,10 +279,10 @@ class Level2Beans:
             self.clear_alpha  = min(255, int(self.clear_timer * 130))
             self.beans_happy  = True
             self.beans_tongue = True
-            # After a short celebration, head to the park level
+            # After a short celebration, head to the yarn level
             if self.clear_timer >= 6.0:
-                from src.utils.constants import SCENE_LEVEL5  # local import to avoid cycle
-                self.next_scene = SCENE_LEVEL5
+                from src.utils.constants import SCENE_LEVEL3  # local import to avoid cycle
+                self.next_scene = SCENE_LEVEL3
 
     # ── Draw ──────────────────────────────────────────────────────────────────
 

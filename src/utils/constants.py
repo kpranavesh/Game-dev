@@ -33,7 +33,7 @@ CARD_H = 430
 SCENE_TITLE      = "title"
 SCENE_LEVEL1     = "level1"
 SCENE_LEVEL2     = "level2"
-# New scenes we’re adding now
+SCENE_LEVEL3     = "level3"
 SCENE_LEVEL5     = "level5_beans_park"
 SCENE_LEVEL6     = "level6_proposal_park"
 SCENE_COMING     = "coming_soon"

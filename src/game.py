@@ -7,6 +7,7 @@ from src.utils.constants import (
     SCENE_TITLE,
     SCENE_LEVEL1,
     SCENE_LEVEL2,
+    SCENE_LEVEL3,
     SCENE_LEVEL5,
     SCENE_LEVEL6,
     SCENE_COMING,
@@ -14,6 +15,7 @@ from src.utils.constants import (
 from src.scenes.title_screen import TitleScreen
 from src.scenes.level1_hinge import Level1Hinge
 from src.scenes.level2_beans import Level2Beans
+from src.scenes.level3_yarn import Level3Yarn
 from src.scenes.level5_beans_park import Level5BeansPark
 from src.scenes.level6_proposal_park import Level6ProposalPark
 from src.scenes.coming_soon import ComingSoonScreen
@@ -35,6 +37,8 @@ class Game:
             return Level1Hinge(SCREEN_W, SCREEN_H)
         elif name == SCENE_LEVEL2:
             return Level2Beans(SCREEN_W, SCREEN_H)
+        elif name == SCENE_LEVEL3:
+            return Level3Yarn(SCREEN_W, SCREEN_H)
         elif name == SCENE_LEVEL5:
             return Level5BeansPark(SCREEN_W, SCREEN_H)
         elif name == SCENE_LEVEL6:
