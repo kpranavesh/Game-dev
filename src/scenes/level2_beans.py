@@ -191,7 +191,8 @@ class Level2Beans:
 
         elif self.state == self.LEVEL_CLEAR:
             if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
-                self.next_scene = SCENE_COMING
+                from src.utils.constants import SCENE_LEVEL3
+                self.next_scene = SCENE_LEVEL3
 
     def _on_click(self, cmd: str):
         self.last_clicked = cmd

@@ -393,7 +393,8 @@ def draw_border_collie(surface, cx, cy, scale=1.0, happy=False, tongue=False, po
                        pose_elapsed_ms=9999):
     """
     Draw Beans — tricolor border collie mix (black/white/tan).
-    Poses: 'sit', 'down', 'free' (food bowl + eating), 'middle' (between Vandita's legs)
+    Poses: 'sit', 'down', 'run' (side-scroller sprint), 'free' (food bowl + eating),
+           'middle' (between Vandita's legs)
     pose_elapsed_ms: milliseconds since this pose was triggered (drives sequenced animations)
     """
     BC_BLACK = (28, 22, 16)
@@ -457,6 +458,42 @@ def draw_border_collie(surface, cx, cy, scale=1.0, happy=False, tongue=False, po
                                 pygame.Rect(px - int(6*s), by + int(15*s), int(12*s), int(5*s)))
         # Head resting low, facing forward
         _beans_head(surface, cx - int(20*s), cy + int(42*s), scale * 0.85, tongue=True, happy=happy)
+
+    elif pose == "run":
+        # ── RUN: endless-runner / side-scroller sprint (lean, gallop legs, tail stream) ──
+        phase = float(pose_elapsed_ms) * 0.001
+        stride = math.sin(phase * 2.0 * math.pi * 2.8)
+        stride2 = math.sin(phase * 2.0 * math.pi * 2.8 + math.pi * 0.5)
+        bx = cx + int(10 * s)
+        by = cy + int(52 * s)
+        lean = int(4 * s) + int(abs(stride) * 3 * s)
+        # Torso — forward lean
+        pygame.draw.ellipse(surface, BC_BLACK,
+                            pygame.Rect(bx - int(34*s), by - int(10*s) + lean, int(68*s), int(38*s)))
+        pygame.draw.ellipse(surface, BC_WHITE,
+                            pygame.Rect(bx - int(18*s), by - int(4*s) + lean, int(36*s), int(28*s)))
+        pygame.draw.ellipse(surface, BC_TAN,
+                            pygame.Rect(bx - int(16*s), by - int(14*s) + lean, int(32*s), int(18*s)))
+        # Four paws — diagonal pairs
+        for i, (ox, oy) in enumerate([
+            (-int(22*s), int(26*s) + int(stride * 10 * s)),
+            (-int(6*s), int(30*s) + int(stride2 * 10 * s)),
+            (int(10*s), int(28*s) + int(stride2 * 10 * s)),
+            (int(24*s), int(22*s) + int(stride * 10 * s)),
+        ]):
+            pygame.draw.ellipse(surface, BC_BLACK,
+                                pygame.Rect(bx + ox - int(8*s), by + oy, int(16*s), int(11*s)))
+            pygame.draw.ellipse(surface, BC_WHITE,
+                                pygame.Rect(bx + ox - int(5*s), by + oy + int(6*s), int(10*s), int(5*s)))
+        # Tail streaming behind
+        wag = math.sin(t * 0.022) * 14
+        tail = [(bx + int(32*s), by - int(8*s) + lean),
+                (bx + int(46*s), by - int(22*s) + int(wag*s) + lean),
+                (bx + int(52*s), by - int(36*s) + int(wag*1.2*s) + lean)]
+        pygame.draw.lines(surface, BC_BLACK, False, tail, max(2, int(6*s)))
+        pygame.draw.circle(surface, BC_WHITE, tail[-1], int(4*s))
+        # Head — forward, eager
+        _beans_head(surface, bx - int(4*s), cy + int(2*s) + lean, scale * 0.94, tongue=True, happy=True)
 
     elif pose == "free":
         # ── FREE: food bowl appears, Beans dashes and eats ─────────────────────

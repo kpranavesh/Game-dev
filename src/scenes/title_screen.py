@@ -63,6 +63,13 @@ class TitleScreen:
         self.font_level = pygame.font.SysFont("Georgia", 22)
 
     def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_3:
+                self.next_scene = SCENE_LEVEL3
+                return
+            if event.key == pygame.K_5:
+                self.next_scene = SCENE_LEVEL5
+                return
         if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
             self.next_scene = SCENE_LEVEL1
 
@@ -145,7 +152,7 @@ class TitleScreen:
 
         # Hint (blinking)
         if int(self.t * 2) % 2 == 0:
-            hint = self.font_hint.render("Press any key to begin  ✦", True, MID_BROWN)
+            hint = self.font_hint.render("Press any key to begin  |  Press 3 for Yarn Crisis  |  Press 5 for Beans Park", True, MID_BROWN)
             surface.blit(hint, (self.w//2 - hint.get_width()//2, 490))
 
         # Two cute characters at bottom sides
