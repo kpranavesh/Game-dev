@@ -21,7 +21,7 @@ from src.utils.constants import (
     HEART_RED,
     DARK_BROWN,
     MID_BROWN,
-    SCENE_LEVEL6,
+    SCENE_FINALE,
     GOLD,
     NOPE_RED,
     LIKE_GREEN,
@@ -143,7 +143,7 @@ class Level5BeansPark:
         self.screen_shake = 0.0
         self.hit_flash = 0.0
 
-        self.win_distance_m = 420.0
+        self.win_distance_m = 320.0
         self.cleared = False
         self.clear_timer = 0.0
         self.fail_timer = 0.0
@@ -297,7 +297,7 @@ class Level5BeansPark:
     # ----------------------------------------------------------------- events
     def handle_event(self, event: pygame.event.Event):
         if self.cleared and event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
-            self.next_scene = SCENE_LEVEL6
+            self.next_scene = SCENE_FINALE
             return
         if self.failed and event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
             self._reset_run()
@@ -325,13 +325,15 @@ class Level5BeansPark:
                 if self.on_ground:
                     self.jump_v = JUMP_V
                     self.on_ground = False
+                    from src.utils.sounds import get_sfx
+                    get_sfx().jump.play()
 
     # ----------------------------------------------------------------- update
     def update(self, dt: float):
         if self.cleared:
             self.clear_timer += dt
             if self.clear_timer > 8.0 and self.next_scene is None:
-                self.next_scene = SCENE_LEVEL6
+                self.next_scene = SCENE_FINALE
             return
         if self.failed:
             self.fail_timer += dt
@@ -400,6 +402,8 @@ class Level5BeansPark:
             self.cleared = True
             self.clear_timer = 0.0
             self.score += 250 + self.treats * 18 + int(self.max_combo * 5)
+            from src.utils.sounds import get_sfx
+            get_sfx().celebrate.play()
 
         new_p: List[Particle] = []
         for p in self.particles:
@@ -457,6 +461,8 @@ class Level5BeansPark:
                     self.combo += 1
                     self.max_combo = max(self.max_combo, self.combo)
                     self._spawn_particles(bx, feet_y - 50, 8, GOLD)
+                    from src.utils.sounds import get_sfx
+                    get_sfx().pickup.play()
                 continue
 
             if ob.kind == ObsKind.BALL:
@@ -494,6 +500,8 @@ class Level5BeansPark:
                     self._hurt("cone")
 
     def _hurt(self, reason: str):
+        from src.utils.sounds import get_sfx
+        get_sfx().hit.play()
         self.combo = 0
         self.hit_flash = 0.42
         self.screen_shake = 0.20
@@ -784,7 +792,7 @@ class Level5BeansPark:
         )
         surface.blit(goal_line, (24, 14))
 
-        hdr = self.f_hdr.render(f"{PARK_NAME}  —  endless runner", True, DARK_BROWN)
+        hdr = self.f_hdr.render(f"Chapter 6  ·  Beans at {PARK_NAME}", True, DARK_BROWN)
         surface.blit(hdr, (24, 38))
 
         ui = self.f_ui.render(

@@ -103,20 +103,25 @@ class Level1Hinge:
         self.show_nope = True
         self.nope_alpha = 255
         self.state = self.EXIT_LEFT
+        from src.utils.sounds import get_sfx
+        get_sfx().swipe.play()
 
     def _do_like(self):
         self.show_like = True
         self.like_alpha = 255
+        from src.utils.sounds import get_sfx
         if self._current_profile().is_krishna:
             self.state = self.MATCHED
             self._spawn_hearts()
+            get_sfx().match.play()
         else:
             self.state = self.EXIT_RIGHT
+            get_sfx().swipe.play()
 
     def handle_event(self, event):
         if self.state != self.IDLE:
             if self.state == self.MATCHED and event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
-                self.next_scene = SCENE_LEVEL2
+                self.next_scene = SCENE_LEVEL6
             return
 
         if event.type == pygame.KEYDOWN:
@@ -165,7 +170,7 @@ class Level1Hinge:
             self.match_alpha = min(255, self.match_alpha + 6)
             self.match_timer += dt
             if self.match_timer > 3.5:
-                self.next_scene = SCENE_LEVEL2
+                self.next_scene = SCENE_LEVEL6
 
         # Fade stamp labels
         if self.nope_alpha > 0:
@@ -284,7 +289,7 @@ class Level1Hinge:
         random.seed()
 
         # Header
-        header = self.font_ui.render(f"Level 1  ·  Swipe Right  ✦  {self.idx + 1}/{len(self.profiles)}", True, DARK_BROWN)
+        header = self.font_ui.render(f"Chapter 1  ·  Swipe Right  ✦  {self.idx + 1}/{len(self.profiles)}", True, DARK_BROWN)
         surface.blit(header, (self.w//2 - header.get_width()//2, 18))
 
         # Instruction hint

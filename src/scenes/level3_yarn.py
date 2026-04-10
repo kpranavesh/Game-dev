@@ -21,7 +21,7 @@ YARN_COLORS = [
 WAVES = [
     {"count": 10, "need": 6,  "speed_range": (80,  140), "interval": 1.2},
     {"count": 14, "need": 9,  "speed_range": (110, 175), "interval": 0.95},
-    {"count": 18, "need": 12, "speed_range": (140, 210), "interval": 0.75},
+    {"count": 18, "need": 10, "speed_range": (140, 210), "interval": 0.75},
 ]
 
 BALL_R = 18
@@ -137,6 +137,8 @@ class Level3Yarn:
                         if math.hypot(ball.x - mx, ball.y - my) <= ball.r + 10:
                             ball.caught = True
                             self.caught += 1
+                            from src.utils.sounds import get_sfx
+                            get_sfx().pop.play()
                             self.flashes.append({
                                 "x": ball.x, "y": ball.y,
                                 "timer": 0.45, "color": ball.color,
@@ -182,6 +184,8 @@ class Level3Yarn:
                     if ball.y >= self.floor_y:
                         ball.stolen = True
                         self.stolen += 1
+                        from src.utils.sounds import get_sfx
+                        get_sfx().woof.play()
 
             # Beans AI: target nearest ball near floor, else patrol
             targets = [b for b in self.balls if b.alive and b.y > self.floor_y - 160]
@@ -207,12 +211,15 @@ class Level3Yarn:
             # Wave end check
             live = [b for b in self.balls if b.alive]
             if self.spawned >= w["count"] and not live:
+                from src.utils.sounds import get_sfx
                 if self.caught >= w["need"]:
                     self.state    = self.ROUND_OK
                     self.fb_timer = 0.0
+                    get_sfx().success.play()
                 else:
                     self.state    = self.ROUND_FAIL
                     self.fb_timer = 0.0
+                    get_sfx().fail.play()
 
         elif self.state == self.ROUND_OK:
             self.fb_timer += dt
@@ -231,8 +238,11 @@ class Level3Yarn:
 
         elif self.state == self.LEVEL_CLEAR:
             self.clear_timer += dt
+            if self.clear_timer < 0.1:
+                from src.utils.sounds import get_sfx
+                get_sfx().celebrate.play()
             self.clear_alpha  = min(255, int(self.clear_timer * 130))
-            if self.clear_timer >= 6.0:
+            if self.clear_timer >= 3.0:
                 self.next_scene = SCENE_LEVEL5
 
     # ── Draw ──────────────────────────────────────────────────────────────────
@@ -253,7 +263,7 @@ class Level3Yarn:
                          pygame.Rect(0, self.floor_y, self.w, 4))
 
         # Header
-        hdr = self.f_hdr.render("Level 3  ·  Yarn Crisis", True, DARK_BROWN)
+        hdr = self.f_hdr.render("Chapter 5  ·  Yarn Crisis", True, DARK_BROWN)
         surface.blit(hdr, (self.w // 2 - hdr.get_width() // 2, 14))
 
         # Wave progress dots
@@ -400,7 +410,7 @@ class Level3Yarn:
         overlay.fill((*SOFT_PINK, min(185, self.clear_alpha)))
         surface.blit(overlay, (0, 0))
         if self.clear_alpha > 80:
-            big = self.f_big.render("Level 3 Complete!", True, DARK_BROWN)
+            big = self.f_big.render("Chapter 5 Complete!", True, DARK_BROWN)
             big.set_alpha(min(255, self.clear_alpha))
             surface.blit(big, (self.w // 2 - big.get_width() // 2, self.h // 2 - 65))
             sub = self.f_sub.render("Vandita saved the yarn. Beans was NOT impressed.", True, MID_BROWN)

@@ -39,6 +39,7 @@ ROUNDS = [
     ["SIT", "DOWN", "MIDDLE"],
     ["FREE", "SIT", "DOWN", "MIDDLE"],
     ["MIDDLE", "FREE", "SIT", "DOWN", "FREE", "MIDDLE"],
+    ["SIT", "FREE", "DOWN", "MIDDLE", "SIT", "FREE", "MIDDLE", "DOWN", "FREE", "SIT"],
 ]
 
 BTN_W, BTN_H, BTN_GAP = 138, 58, 14
@@ -127,6 +128,7 @@ class Level2Beans:
         self.beans_pose    = "middle"
         self.pose_timer    = 0.0    # how long to hold pose before returning to middle
         self.pose_start_ms = pygame.time.get_ticks()
+        self._chomp_played = False
 
         # Hearts
         self.hearts: list[HeartParticle] = []
@@ -195,14 +197,19 @@ class Level2Beans:
                 self.next_scene = SCENE_LEVEL3
 
     def _on_click(self, cmd: str):
+        from src.utils.sounds import get_sfx
         self.last_clicked = cmd
         # Trigger Beans pose immediately on any button press
         self.beans_pose    = CMD_POSE[cmd]
         self.pose_start_ms = pygame.time.get_ticks()
+        self._chomp_played = False
         # MIDDLE and FREE have multi-phase animations — hold longer
         self.pose_timer = 2.5 if cmd in ("MIDDLE", "FREE") else 0.8
         expected = self.current_round[len(self.player_input)]
         if cmd == expected:
+            cmd_sounds = {"SIT": get_sfx().boop_sit, "DOWN": get_sfx().boop_down,
+                          "MIDDLE": get_sfx().boop_middle, "FREE": get_sfx().boop_free}
+            cmd_sounds.get(cmd, get_sfx().boop).play()
             self.player_input.append(cmd)
             if len(self.player_input) == len(self.current_round):
                 # Round complete
@@ -212,11 +219,13 @@ class Level2Beans:
                 self.beans_tongue = True
                 self.beans_spin   = 0.0
                 self._spawn_hearts()
+                get_sfx().success.play()
         else:
             self.state        = self.FEEDBACK_FAIL
             self.fb_timer     = 0.0
             self.beans_happy  = False
             self.beans_tongue = False
+            get_sfx().fail.play()
 
     # ── Update ────────────────────────────────────────────────────────────────
 
@@ -227,8 +236,16 @@ class Level2Beans:
         # Pose timer — return to middle after holding
         if self.pose_timer > 0:
             self.pose_timer -= dt
+            # Play sloppy chomp when Beans reaches the eating phase of FREE
+            if self.beans_pose == "free" and not self._chomp_played:
+                elapsed = pygame.time.get_ticks() - self.pose_start_ms
+                if elapsed > 800:  # after Beans walks to bowl and starts eating
+                    from src.utils.sounds import get_sfx
+                    get_sfx().chomp.play()
+                    self._chomp_played = True
             if self.pose_timer <= 0 and self.state not in (self.FEEDBACK_OK, self.LEVEL_CLEAR):
                 self.beans_pose = "middle"
+                self._chomp_played = False
 
         # Hearts
         for h in self.hearts:
@@ -262,6 +279,8 @@ class Level2Beans:
                 if self.round_idx >= len(ROUNDS):
                     self.state       = self.LEVEL_CLEAR
                     self.clear_timer = 0.0
+                    from src.utils.sounds import get_sfx
+                    get_sfx().celebrate.play()
                 else:
                     self._start_show()
 
@@ -299,7 +318,7 @@ class Level2Beans:
             pygame.draw.line(surface, (r, g, b), (0, y), (self.w, y))
 
         # Header
-        hdr = self.f_hdr.render("Level 2  ·  Good Girl, Beans", True, DARK_BROWN)
+        hdr = self.f_hdr.render("Chapter 4  ·  Good Girl, Beans", True, DARK_BROWN)
         surface.blit(hdr, (self.w // 2 - hdr.get_width() // 2 + sx, 14))
 
         # Round progress dots (3 rounds)
@@ -411,8 +430,8 @@ class Level2Beans:
         surface.blit(hint, (self.w // 2 - hint.get_width() // 2 + sx, self.beans_cy - 72))
 
     def _draw_feedback_ok(self, surface, sx):
-        msgs = ["Round 1 done! 🎯", "Round 2 done! 🌟", "All 3 rounds! 💕"]
-        msg  = msgs[min(self.round_idx, 2)]
+        msgs = ["Round 1 done! 🎯", "Round 2 done! 🌟", "Round 3 done! 🔥", "All 4 rounds! 💕"]
+        msg  = msgs[min(self.round_idx, 3)]
         m    = self.f_cmd.render(msg, True, DARK_BROWN)
         card = pygame.Surface((m.get_width() + 44, 52), pygame.SRCALPHA)
         pygame.draw.rect(card, (*SOFT_PINK, 210), (0, 0, card.get_width(), 52), border_radius=14)
@@ -431,7 +450,7 @@ class Level2Beans:
         overlay.fill((*SOFT_PINK, min(185, self.clear_alpha)))
         surface.blit(overlay, (0, 0))
         if self.clear_alpha > 80:
-            big = self.f_big.render("Level 2 Complete! 🐾", True, DARK_BROWN)
+            big = self.f_big.render("Chapter 4 Complete! 🐾", True, DARK_BROWN)
             big.set_alpha(min(255, self.clear_alpha))
             surface.blit(big, (self.w // 2 - big.get_width() // 2, self.h // 2 - 65))
             sub = self.f_sub.render("Beans is a very good girl.", True, MID_BROWN)

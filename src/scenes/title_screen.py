@@ -63,13 +63,6 @@ class TitleScreen:
         self.font_level = pygame.font.SysFont("Georgia", 22)
 
     def handle_event(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_3:
-                self.next_scene = SCENE_LEVEL3
-                return
-            if event.key == pygame.K_5:
-                self.next_scene = SCENE_LEVEL5
-                return
         if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
             self.next_scene = SCENE_LEVEL1
 
@@ -144,7 +137,7 @@ class TitleScreen:
         _draw_heart(surface, self.w//2, heart_y, hs, HEART_RED)
 
         # Subtitle
-        sub_surf = self.font_sub.render("A love story in 10 levels  ♡", True, MID_BROWN)
+        sub_surf = self.font_sub.render("A love story, for you  ♡", True, MID_BROWN)
         surface.blit(sub_surf, (self.w//2 - sub_surf.get_width()//2, 295))
 
         for_surf = self.font_sub.render("Made for Vandita · April 10, 2026", True, MID_BROWN)
@@ -152,7 +145,7 @@ class TitleScreen:
 
         # Hint (blinking)
         if int(self.t * 2) % 2 == 0:
-            hint = self.font_hint.render("Press any key to begin  |  Press 3 for Yarn Crisis  |  Press 5 for Beans Park", True, MID_BROWN)
+            hint = self.font_hint.render("Press any key to begin", True, MID_BROWN)
             surface.blit(hint, (self.w//2 - hint.get_width()//2, 490))
 
         # Two cute characters at bottom sides
@@ -162,7 +155,7 @@ class TitleScreen:
                        skin=(235, 195, 160), hair=(100, 70, 40), hair_style=1, blush=True)
 
         # Level preview at bottom of card
-        lvl_surf = self.font_level.render("Level 1: Swipe Right →", True, MID_BROWN)
+        lvl_surf = self.font_level.render("Chapter 1: Swipe Right →", True, MID_BROWN)
         surface.blit(lvl_surf, (self.w//2 - lvl_surf.get_width()//2, 550))
 
 
